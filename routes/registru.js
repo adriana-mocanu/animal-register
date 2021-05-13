@@ -51,6 +51,7 @@ router.get("/", function (req, res, next) {
         )
       ) as most_recent
       ON r.id = most_recent.animalId
+    ORDER BY r.id
     `;
     connection.query(sql, function (err, results) {
       if (err) throw err;
@@ -124,18 +125,34 @@ router.post("/add", function (req, res, next) {
   const birthday = req.body.birthday;
   const nrCrotal = req.body.nrCrotal;
   const sex = req.body.sex;
+  const deparazitare = req.body.deparazitare;
+  const dataDeparazitare = req.body.dataDeparazitare;
+  const produsul = req.body.produsul;
 
   pool.getConnection(function (err, connection) {
     if (err) throw err;
     const sql = `INSERT INTO registru (id, birthday, nrCrotal, sex) VALUES (NULL, ?, ?, ?);`;
     connection.query(sql, [birthday, nrCrotal, sex], function (err, results) {
       if (err) throw err;
-      const id = results.insertId;
-      connection.release();
-      res.json({
-        success: true,
-        id
-      });
+      const animalId = results.insertId;
+      if (deparazitare && dataDeparazitare && produsul) {
+        const sql = `INSERT INTO deparazitari (id, animalId, deparazitare, dataDeparazitare, produsul) VALUES (NULL, ?, ?, ?, ?);`;
+        connection.query(sql, [animalId, deparazitare, dataDeparazitare, produsul], function (err, results) {
+          if (err) throw err;
+          connection.release();
+          res.json({
+            success: true,
+            id: animalId
+          });
+        })
+
+      } else {
+        connection.release();
+        res.json({
+          success: true,
+          id: animalId
+        });
+      }
     });
   });
 });
