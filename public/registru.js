@@ -2,9 +2,9 @@ let allAnimals = [];
 let editId;
 
 function getHtmlRegister(animals) {
-   return animals.map((animal, i) => {
-    return `<tr> 
-    <td>${i+1}</td>
+    return animals.map((animal, i) => {
+        return `<tr> 
+    <td>${i + 1}</td>
     <td>${animal.nrCrotal}</td>
     <td>${animal.sex}</td>
     <td>${animal.birthday}</td>
@@ -25,51 +25,51 @@ function getHtmlRegister(animals) {
         <a href="#" class="edit-btn" data-id="${registru.id}">✎</a>
     </td>   
     </tr>`
-}).join("")
+    }).join("")
 }
 
- function showAnimals(animals) {
+function showAnimals(animals) {
     const html = getHtmlRegister(animals);
 
     const tbody = document.querySelector("#registru tbody");
     tbody.innerHTML = html;
 }
- 
+
 function loadAnimals() {
     fetch("/registru")
-    .then(r => r.json())
-    .then(animals => {
-        allAnimals = animals;
-        showAnimals(animals);
-    });
+        .then(r => r.json())
+        .then(animals => {
+            allAnimals = animals;
+            showAnimals(animals);
+        });
 }
 loadAnimals();
 
 function addAnimal(animal) {
-    fetch("http://localhost:3000/animals/create", { 
+    fetch("http://localhost:3000/registru/add", {
         method: "POST",
         body: JSON.stringify(animal),
         headers: {
             "Content-Type": "application/json"
         }
     })
-    .then(r => r.json())
-    .then(status => {
-        if (status.success) {
-            loadAnimals();
-        }
-    });
+        .then(r => r.json())
+        .then(status => {
+            if (status.success) {
+                loadAnimals();
+            }
+        });
 }
 
 
 function updateAnimals(animal) {
-    fetch("http://localhost:3000/animals/update",{
+    fetch("http://localhost:3000/animals/update", {
         method: "Put",
         body: JSON.stringify(animal),
         headers: {
-            "Content-Type":"application/json"
+            "Content-Type": "application/json"
         }
-        
+
     })
         .then(r => r.json())
         .then(status => {
@@ -95,10 +95,10 @@ document.querySelector("table tbody").addEventListener("click", e => {
 
 function saveAnimals() {
     // const nrOrdin = document.querySelector("input[name=i+]").value;
-    const  nrCrotal= document.querySelector("input[name=nrCrotal]").value;
+    const nrCrotal = document.querySelector("input[name=nrCrotal]").value;
     const sex = document.querySelector("input[name=sex]").value;
     const birthday = document.querySelector("input[name=birthday]").value;
-    const  deparazitare= document.querySelector("input[name=deparazitare]").value;
+    const deparazitare = document.querySelector("input[name=deparazitare]").value;
     const dataDeparazitare = document.querySelector("input[name=dataDeparazitare]").value;
     const produsul = document.querySelector("input[name=produsul]").value;
 
@@ -121,6 +121,6 @@ function saveAnimals() {
         addAnimal(animal);
 
     }
-    
+
 };
 

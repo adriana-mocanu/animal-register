@@ -90,7 +90,7 @@ router.get("/mame", function (req, res, next) {
       DATE_FORMAT(exitDate, "%Y-%m-%d") as exitDate, 
       motherId 
       FROM registru 
-      WHERE sex="F" `;    
+      WHERE sex="F" `;
     connection.query(sql, function (err, results) {
       if (err) throw err;
       connection.release();
@@ -108,7 +108,7 @@ router.get("/berbeci", function (req, res, next) {
       DATE_FORMAT(exitDate, "%Y-%m-%d") as exitDate, 
       motherId 
       FROM registru 
-      WHERE sex="M" `;    
+      WHERE sex="M" `;
     connection.query(sql, function (err, results) {
       if (err) throw err;
       connection.release();
@@ -120,15 +120,15 @@ router.get("/berbeci", function (req, res, next) {
 /**
  *
  */
-router.post("/create", function (req, res, next) {
-  const members = req.body.members;
-  const name = req.body.name;
-  const url = req.body.url;
+router.post("/add", function (req, res, next) {
+  const birthday = req.body.birthday;
+  const nrCrotal = req.body.nrCrotal;
+  const sex = req.body.sex;
 
   pool.getConnection(function (err, connection) {
     if (err) throw err;
-    const sql = `INSERT INTO registru (id, members, name, url) VALUES (NULL, ?, ?, ?);`;
-    connection.query(sql, [members, name, url], function (err, results) {
+    const sql = `INSERT INTO registru (id, birthday, nrCrotal, sex) VALUES (NULL, ?, ?, ?);`;
+    connection.query(sql, [birthday, nrCrotal, sex], function (err, results) {
       if (err) throw err;
       const id = results.insertId;
       connection.release();
